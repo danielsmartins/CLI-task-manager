@@ -31,6 +31,7 @@ export default [
   {
     ignores: [
       'coverage/**',
+      'dist/**',
       'node_modules/**',
       'scripts/**',
       'quality-gate-report.md'

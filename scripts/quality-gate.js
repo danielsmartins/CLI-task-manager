@@ -241,12 +241,13 @@ function runQualityGate() {
 
   fs.writeFileSync(REPORT_OUTPUT_PATH, reportMarkdown, 'utf-8');
 
-  // Quality gate pass/fail conditions
-  const hasCoverageDrop = delta.coverageLines < -2 || delta.coverageBranches < -2;
+  // Quality gate pass/fail conditions:
+  // Exige cobertura mínima de 80% em linhas e branches e ausência de novas violações de linter
+  const isBelowThreshold = current.coverageLines < 80 || current.coverageBranches < 80;
   const hasNewViolations = delta.ruleViolations > 0;
 
-  if (hasCoverageDrop || hasNewViolations) {
-    console.error('❌ Quality Gate failed! Coverage dropped or new violations introduced.');
+  if (isBelowThreshold || hasNewViolations) {
+    console.error('❌ Quality Gate failed! Coverage is below 80% threshold or new violations introduced.');
     if (process.env.CI) {
       process.exit(1);
     }
