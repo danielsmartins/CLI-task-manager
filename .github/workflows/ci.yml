@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Tests with Coverage
+        run: npm run test:coverage
+
+      - name: Run Quality Gate Analysis
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            node scripts/quality-gate.js --update-baseline
+          else
+            node scripts/quality-gate.js
+          fi
+
+      - name: Post Quality Gate PR Comment
+        if: always() && github.event_name == 'pull_request' && hashFiles('quality-gate-report.md') != ''
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: quality-gate-report.md
+
+      - name: Commit and Push Updated Baseline
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .quality-gate-baseline.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(ci): update quality gate baseline [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
