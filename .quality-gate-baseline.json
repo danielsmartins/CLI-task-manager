@@ -1,10 +1,10 @@
 {
-  "coverageLines": "Unknown",
-  "coverageStatements": "Unknown",
-  "coverageFunctions": "Unknown",
-  "coverageBranches": "Unknown",
-  "duplicationPct": 0,
-  "duplicationFragments": 0,
+  "coverageLines": 100,
+  "coverageStatements": 100,
+  "coverageFunctions": 100,
+  "coverageBranches": 97.53,
+  "duplicationPct": 4.2622950819672125,
+  "duplicationFragments": 3,
   "ruleViolations": 0,
   "oversizedFiles": 0
 }
