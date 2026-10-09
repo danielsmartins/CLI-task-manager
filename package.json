@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Gerenciador de tarefas em linha de comando (CLI) em Node.js ESM",
   "type": "module",
-  "bin": {
-    "tarefas": "./bin/tarefas.js"
-  },
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
