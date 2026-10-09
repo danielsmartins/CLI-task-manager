@@ -15,7 +15,7 @@ Este arquivo define os padrões de testes automatizados do projeto CLI Task Mana
 ---
 
 ## 2. Cobertura e Isolamento
-- **Meta de Cobertura**: 100% em regras de negócio (`services/`) e persistência (`storage/`).
+- **Meta de Cobertura**: Mínimo de 80% de cobertura em linhas e branches em todo o código (garantindo robustez e confiabilidade sem preciosismos de 100%).
 - **Isolamento de Testes**:
   - Nunca deixe testes alterarem o `tasks.json` da raiz do projeto.
   - Ao testar o storage, utilize caminhos temporários (`node:os` / `mkdtemp`) ou mocks de filesystem para garantir idempotência.

@@ -8,7 +8,7 @@ Uma aplicação de linha de comando (CLI) simples, robusta e modular para gerenc
 
 O **CLI Task Manager** permite criar, visualizar, filtrar, concluir, editar e remover tarefas diretamente pelo terminal. Todas as tarefas são mantidas em um arquivo local (`tasks.json`), garantindo que os dados permaneçam salvos após o fechamento do programa.
 
-A aplicação foi projetada utilizando Clean Code, arquitetura desacoplada em 3 camadas, tratamento amigável de erros (sem exibição de stack traces ao usuário final), documentação completa em JSDoc e 100% de cobertura de testes automatizados com Vitest.
+A aplicação foi projetada utilizando Clean Code, arquitetura desacoplada em 3 camadas, tratamento amigável de erros (sem exibição de stack traces ao usuário final), documentação completa em JSDoc e alta cobertura de testes automatizados com Vitest.
 
 ---
 
@@ -226,11 +226,10 @@ npm run test:coverage
 npm run lint
 ```
 
-**Métricas de Cobertura de Código:**
-- **Linhas:** 100%
-- **Instruções:** 100%
-- **Funções:** 100%
-- **Branches:** 97.5%
+**Métricas de Cobertura e Quality Gate:**
+O projeto adota uma diretriz de qualidade com **meta mínima de 80% de cobertura de código** .
+
+As métricas exatas e a tabela comparativa com variação ($\Delta$), duplicação e regras estáticas são geradas a cada alteração e **publicadas automaticamente pelo GitHub Actions nos comentários de cada Pull Request**.
 
 ---
 
