@@ -13,12 +13,13 @@ const REPORT_OUTPUT_PATH = path.join(PROJECT_ROOT, 'quality-gate-report.md');
 
 // Helper to format float with 2 decimals and sign for delta
 function formatPct(val) {
-  return `${Number(val).toFixed(2)}%`;
+  const num = Number(val);
+  return `${(Number.isNaN(num) ? 0 : num).toFixed(2)}%`;
 }
 
 function formatDeltaPct(delta) {
   const num = Number(delta);
-  if (Math.abs(num) < 0.001) return '0.00%';
+  if (Number.isNaN(num) || Math.abs(num) < 0.001) return '0.00%';
   const sign = num > 0 ? '+' : '';
   return `${sign}${num.toFixed(2)}%`;
 }
@@ -40,11 +41,15 @@ function getCoverageMetrics() {
     const raw = fs.readFileSync(COVERAGE_SUMMARY_PATH, 'utf-8');
     const summary = JSON.parse(raw);
     const total = summary.total || {};
+    const parsePct = (val) => {
+      const num = Number(val);
+      return Number.isNaN(num) ? 0 : num;
+    };
     return {
-      lines: total.lines ? total.lines.pct : 0,
-      statements: total.statements ? total.statements.pct : 0,
-      functions: total.functions ? total.functions.pct : 0,
-      branches: total.branches ? total.branches.pct : 0,
+      lines: total.lines ? parsePct(total.lines.pct) : 0,
+      statements: total.statements ? parsePct(total.statements.pct) : 0,
+      functions: total.functions ? parsePct(total.functions.pct) : 0,
+      branches: total.branches ? parsePct(total.branches.pct) : 0,
     };
   } catch (err) {
     console.error('Error reading coverage summary:', err);
