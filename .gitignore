@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Testing & Quality Gate
+coverage/
+quality-gate-report.md
+eslint-report.json
+
+# Local runtime storage (tasks database)
+tasks.json
+
+# Environment & System
+*.log
+.DS_Store
+Thumbs.db
