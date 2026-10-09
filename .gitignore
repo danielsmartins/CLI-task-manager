@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Build artifacts
+dist/
+
 # Testing & Quality Gate
 coverage/
 quality-gate-report.md

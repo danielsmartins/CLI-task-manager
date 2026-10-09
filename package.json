@@ -10,7 +10,11 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "quality-gate": "node scripts/quality-gate.js"
+    "quality-gate": "node scripts/quality-gate.js",
+    "build:bundle": "esbuild src/index.js --bundle --platform=node --outfile=dist/bundle.cjs",
+    "build:bin:win": "npm run build:bundle && caxa --input dist --output dist/tarefas.exe -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/bundle.cjs\"",
+    "build:bin:linux": "npm run build:bundle && caxa --input dist --output dist/tarefas-linux -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/bundle.cjs\"",
+    "build:bin": "npm run build:bin:win"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -25,6 +29,8 @@
   "license": "MIT",
   "devDependencies": {
     "@vitest/coverage-v8": "^3.0.7",
+    "caxa": "^3.0.1",
+    "esbuild": "^0.28.2",
     "eslint": "^9.21.0",
     "vitest": "^3.0.7"
   }

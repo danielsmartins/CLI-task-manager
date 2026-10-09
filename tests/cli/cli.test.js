@@ -61,6 +61,12 @@ describe('CLI - Camada de Apresentacao', () => {
       expect(logs[0]).toContain('editar <id>');
     });
 
+    it('deve permitir customizar o nome do executavel no menu de ajuda', () => {
+      const customHelp = getHelpMessage('tarefas.exe');
+      expect(customHelp).toContain('tarefas.exe <comando> [argumentos]');
+      expect(customHelp).toContain('tarefas.exe adicionar "Estudar Git"');
+    });
+
     it('deve exibir o menu de ajuda quando chamado com "ajuda" ou "--help"', async () => {
       await runCli(['ajuda'], mockService, io);
       expect(logs[0]).toBe(getHelpMessage());

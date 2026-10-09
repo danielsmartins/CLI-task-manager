@@ -11,15 +11,31 @@ import { defaultTaskService } from '../services/taskService.js';
  */
 
 /**
+ * Detecta o comando de invocação apropriado (script node ou binário em dist/).
+ * @returns {string} Nome ou caminho do comando a exibir.
+ */
+export function getProgramName() {
+  if (process.env.APP_BIN_NAME) {
+    return process.env.APP_BIN_NAME;
+  }
+  const isPackaged = process.argv[1]?.includes('bundle.cjs') || process.argv0?.includes('tarefas');
+  if (isPackaged) {
+    return process.platform === 'win32' ? './dist/tarefas.exe' : './dist/tarefas-linux';
+  }
+  return 'node src/index.js';
+}
+
+/**
  * Retorna o menu de ajuda com todos os comandos disponíveis e exemplos de uso.
+ * @param {string} [programName=getProgramName()] - Nome do executavel a exibir no menu.
  * @returns {string} Mensagem de ajuda devidamente formatada.
  */
-export function getHelpMessage() {
+export function getHelpMessage(programName = getProgramName()) {
   return `
 Gerenciador de Tarefas CLI
 
 Uso:
-  node src/index.js <comando> [argumentos]
+  ${programName} <comando> [argumentos]
 
 Comandos:
   adicionar <descricao>            Adiciona uma nova tarefa
@@ -30,12 +46,12 @@ Comandos:
   ajuda                            Exibe esta mensagem de ajuda
 
 Exemplos:
-  node src/index.js adicionar "Estudar Git"
-  node src/index.js listar
-  node src/index.js listar --status pendente
-  node src/index.js concluir 1
-  node src/index.js editar 1 "Estudar Git avancado"
-  node src/index.js remover 1
+  ${programName} adicionar "Estudar Git"
+  ${programName} listar
+  ${programName} listar --status pendente
+  ${programName} concluir 1
+  ${programName} editar 1 "Estudar Git avancado"
+  ${programName} remover 1
 `.trim();
 }
 
@@ -153,8 +169,9 @@ export async function runCli(args = [], service = defaultTaskService, io = {}) {
       }
 
       default: {
+        const programName = getProgramName();
         throw new Error(
-          `Comando "${command}" não reconhecido. Use "node src/index.js ajuda" para ver os comandos disponíveis.`
+          `Comando "${command}" não reconhecido. Use "${programName} ajuda" para ver os comandos disponíveis.`
         );
       }
     }
