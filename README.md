@@ -144,9 +144,37 @@ node src/index.js --help
 
 ### Modo 2: Executável Compilado (Diferencial)
 
-A aplicação pode ser compilada em binários autocontidos que rodam diretamente no terminal sem necessidade do Node.js instalado no ambiente final.
+A aplicação conta com executáveis autocontidos que rodam diretamente no terminal sem necessidade do Node.js instalado no ambiente final.
 
-#### Como gerar os executáveis localmente:
+#### Opção A: Download Direto via GitHub Releases (Sem Node.js)
+Não é necessário clonar o código-fonte nem instalar dependências:
+1. Acesse a página de [Releases do GitHub](https://github.com/danielsmartins/CLI-task-manager/releases).
+2. Baixe o executável correspondente ao seu sistema operacional:
+   - **Windows:** `tarefas.exe`
+   - **Linux:** `tarefas-linux`
+3. Abra o terminal na pasta onde o arquivo foi baixado e execute:
+
+**No Windows (PowerShell / CMD):**
+```powershell
+.\tarefas.exe ajuda
+.\tarefas.exe adicionar "Comprar café"
+.\tarefas.exe listar
+.\tarefas.exe concluir 1
+.\tarefas.exe remover 1
+```
+
+**No Linux (Terminal):**
+```bash
+chmod +x tarefas-linux
+./tarefas-linux ajuda
+./tarefas-linux adicionar "Comprar café"
+./tarefas-linux listar
+./tarefas-linux concluir 1
+./tarefas-linux remover 1
+```
+
+#### Opção B: Compilação Local a partir do Código-Fonte
+Caso tenha clonado o repositório com Node.js instalado e deseje gerar os binários localmente:
 - **Para Windows (`dist/tarefas.exe`):**
   ```bash
   npm run build:bin:win
@@ -156,22 +184,13 @@ A aplicação pode ser compilada em binários autocontidos que rodam diretamente
   npm run build:bin:linux
   ```
 
-#### Como executar no Windows:
+Execução após a compilação local:
 ```powershell
-.\dist\tarefas.exe ajuda
-.\dist\tarefas.exe adicionar "Comprar café"
+# Windows:
 .\dist\tarefas.exe listar
-.\dist\tarefas.exe concluir 1
-.\dist\tarefas.exe remover 1
-```
 
-#### Como executar no Linux:
-```bash
-./dist/tarefas-linux ajuda
-./dist/tarefas-linux adicionar "Comprar café"
+# Linux:
 ./dist/tarefas-linux listar
-./dist/tarefas-linux concluir 1
-./dist/tarefas-linux remover 1
 ```
 
 > **Nota para usuários de macOS:** No macOS, utilize a execução nativa via Node.js (`node src/index.js <comando>`), que roda sem necessidade de compilação adicional.
@@ -257,11 +276,14 @@ src/
 ### 2. Decisões Tomadas
 
 - **ES Modules Nativos (`"type": "module"`)**: Optou-se por JavaScript moderno puro sem necessidade de etapa de build para rodar. Qualquer avaliador pode clonar o projeto e rodar `node src/index.js` imediatamente.
+- **Injeção de Dependências & Design Híbrido**:
+  - **Classes (`TaskService`, `TaskStorage`)**: Usam injeção via construtor para que múltiplos métodos compartilhem as dependências (`this.storage`, `this.filePath`).
+  - **Módulo Funcional (`cli.js`)**: Usa injeção via parâmetros na função `runCli(args, service, io)`, evitando criar uma classe com apenas um método.
 - **Documentação JSDoc Completa**: Todo o código foi documentado com JSDoc (`@typedef`, `@param`, `@returns`, `@throws`), fornecendo anotações de tipos, autocompletion inteligente na IDE e documentação clara dos contratos de cada função.
 - **Implementação de Todos os Diferenciais**:
   - Filtragem por status (`--status pendente` / `listar concluida`).
   - Edição de descrição de tarefa (`editar <id> <nova_descricao>`).
-  - Testes automatizados com 100% de cobertura.
+  - Testes automatizados com alta cobertura (meta mínima de 80%).
   - Separação estrita em camadas (entrada, regras e armazenamento).
   - Executáveis compilados autocontidos para Windows e Linux.
 - **Esteira de CI & Quality Gate**: Configuração de pipeline no GitHub Actions comparando métricas de cobertura, duplicação e regras estáticas a cada Pull Request.

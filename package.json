@@ -12,8 +12,8 @@
     "lint": "eslint .",
     "quality-gate": "node scripts/quality-gate.js",
     "build:bundle": "esbuild src/index.js --bundle --platform=node --outfile=dist/bundle.cjs",
-    "build:bin:win": "npm run build:bundle && caxa --input dist --output dist/tarefas.exe -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/bundle.cjs\"",
-    "build:bin:linux": "npm run build:bundle && caxa --input dist --output dist/tarefas-linux -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/bundle.cjs\"",
+    "build:bin:win": "npm run build:bundle && caxa --input dist --exclude \"tarefas*\" --output dist/tarefas.exe -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/bundle.cjs\"",
+    "build:bin:linux": "npm run build:bundle && caxa --input dist --exclude \"tarefas*\" --output dist/tarefas-linux -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/bundle.cjs\"",
     "build:bin": "npm run build:bin:win"
   },
   "engines": {

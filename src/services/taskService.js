@@ -42,7 +42,7 @@ export class TaskService {
     }
 
     const tasks = await this.storage.loadTasks();
-    const nextId = tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
+    const nextId = tasks.length > 0 ? Math.max(...tasks.map((task) => task.id)) + 1 : 1;
 
     const newTask = {
       id: nextId,
@@ -67,7 +67,7 @@ export class TaskService {
       return tasks;
     }
     const normalizedFilter = filterStatus.toLowerCase();
-    return tasks.filter((t) => t.status.toLowerCase() === normalizedFilter);
+    return tasks.filter((task) => task.status.toLowerCase() === normalizedFilter);
   }
 
   /**
@@ -78,7 +78,7 @@ export class TaskService {
    */
   async completeTask(id) {
     const tasks = await this.storage.loadTasks();
-    const task = tasks.find((t) => t.id === Number(id));
+    const task = tasks.find((task) => task.id === Number(id));
 
     if (!task) {
       throw new Error(`Tarefa #${id} não encontrada.`);
@@ -97,7 +97,7 @@ export class TaskService {
    */
   async removeTask(id) {
     const tasks = await this.storage.loadTasks();
-    const index = tasks.findIndex((t) => t.id === Number(id));
+    const index = tasks.findIndex((task) => task.id === Number(id));
 
     if (index === -1) {
       throw new Error(`Tarefa #${id} não encontrada.`);
@@ -122,7 +122,7 @@ export class TaskService {
     }
 
     const tasks = await this.storage.loadTasks();
-    const task = tasks.find((t) => t.id === Number(id));
+    const task = tasks.find((task) => task.id === Number(id));
 
     if (!task) {
       throw new Error(`Tarefa #${id} não encontrada.`);
