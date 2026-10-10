@@ -257,11 +257,14 @@ src/
 ### 2. Decisões Tomadas
 
 - **ES Modules Nativos (`"type": "module"`)**: Optou-se por JavaScript moderno puro sem necessidade de etapa de build para rodar. Qualquer avaliador pode clonar o projeto e rodar `node src/index.js` imediatamente.
+- **Injeção de Dependências & Design Híbrido**:
+  - **Classes (`TaskService`, `TaskStorage`)**: Usam injeção via construtor para que múltiplos métodos compartilhem as dependências (`this.storage`, `this.filePath`).
+  - **Módulo Funcional (`cli.js`)**: Usa injeção via parâmetros na função `runCli(args, service, io)`, evitando criar uma classe com apenas um método.
 - **Documentação JSDoc Completa**: Todo o código foi documentado com JSDoc (`@typedef`, `@param`, `@returns`, `@throws`), fornecendo anotações de tipos, autocompletion inteligente na IDE e documentação clara dos contratos de cada função.
 - **Implementação de Todos os Diferenciais**:
   - Filtragem por status (`--status pendente` / `listar concluida`).
   - Edição de descrição de tarefa (`editar <id> <nova_descricao>`).
-  - Testes automatizados com 100% de cobertura.
+  - Testes automatizados com alta cobertura (meta mínima de 80%).
   - Separação estrita em camadas (entrada, regras e armazenamento).
   - Executáveis compilados autocontidos para Windows e Linux.
 - **Esteira de CI & Quality Gate**: Configuração de pipeline no GitHub Actions comparando métricas de cobertura, duplicação e regras estáticas a cada Pull Request.

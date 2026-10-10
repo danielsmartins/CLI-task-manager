@@ -76,16 +76,16 @@ export function extractListStatusFilter(args) {
 
   const flagIndex = args.indexOf('--status');
   if (flagIndex !== -1 && args[flagIndex + 1]) {
-    const raw = args[flagIndex + 1].toLowerCase();
-    if (raw.startsWith('pend')) return 'pendente';
-    if (raw.startsWith('conc')) return 'concluída';
-    return raw;
+    const flagStatus = args[flagIndex + 1].toLowerCase();
+    if (flagStatus.startsWith('pend')) return 'pendente';
+    if (flagStatus.startsWith('conc')) return 'concluída';
+    return flagStatus;
   }
 
-  const positional = args[0]?.toLowerCase();
-  if (positional) {
-    if (positional.startsWith('pend')) return 'pendente';
-    if (positional.startsWith('conc')) return 'concluída';
+  const directStatus = args[0]?.toLowerCase();
+  if (directStatus) {
+    if (directStatus.startsWith('pend')) return 'pendente';
+    if (directStatus.startsWith('conc')) return 'concluída';
   }
 
   return null;
@@ -100,83 +100,83 @@ export function extractListStatusFilter(args) {
  * @returns {Promise<void>}
  */
 export async function runCli(args = [], service = defaultTaskService, io = {}) {
-  const log = io.out || console.log;
-  const logError = io.err || console.error;
+  const print = io.out || console.log;
+  const printError = io.err || console.error;
 
-  const command = args[0];
-  const commandArgs = args.slice(1);
+  const action = args[0];
+  const actionArgs = args.slice(1);
 
-  if (!command || command === 'ajuda' || command === '--help' || command === '-h') {
-    log(getHelpMessage());
+  if (!action || action === 'ajuda' || action === '--help' || action === '-h') {
+    print(getHelpMessage());
     return;
   }
 
   try {
-    switch (command) {
+    switch (action) {
       case 'adicionar': {
-        const description = commandArgs.join(' ').trim();
+        const description = actionArgs.join(' ').trim();
         if (!description) {
           throw new Error('A descrição da tarefa não pode estar vazia.');
         }
         const created = await service.addTask(description);
-        log(`Tarefa #${created.id} adicionada.`);
+        print(`Tarefa #${created.id} adicionada.`);
         break;
       }
 
       case 'listar': {
-        const filter = extractListStatusFilter(commandArgs);
+        const filter = extractListStatusFilter(actionArgs);
         const tasks = await service.listTasks(filter);
         if (!tasks || tasks.length === 0) {
-          log('Nenhuma tarefa encontrada.');
+          print('Nenhuma tarefa encontrada.');
         } else {
-          tasks.forEach((task) => log(formatTask(task)));
+          tasks.forEach((task) => print(formatTask(task)));
         }
         break;
       }
 
       case 'concluir': {
-        const id = Number(commandArgs[0]);
-        if (!commandArgs[0] || Number.isNaN(id) || id <= 0) {
+        const id = Number(actionArgs[0]);
+        if (!actionArgs[0] || Number.isNaN(id) || id <= 0) {
           throw new Error('Por favor, informe um ID numérico válido.');
         }
         const updated = await service.completeTask(id);
-        log(`Tarefa #${updated.id} concluída.`);
+        print(`Tarefa #${updated.id} concluída.`);
         break;
       }
 
       case 'remover': {
-        const id = Number(commandArgs[0]);
-        if (!commandArgs[0] || Number.isNaN(id) || id <= 0) {
+        const id = Number(actionArgs[0]);
+        if (!actionArgs[0] || Number.isNaN(id) || id <= 0) {
           throw new Error('Por favor, informe um ID numérico válido.');
         }
         const removed = await service.removeTask(id);
-        log(`Tarefa #${removed.id} removida.`);
+        print(`Tarefa #${removed.id} removida.`);
         break;
       }
 
       case 'editar': {
-        const id = Number(commandArgs[0]);
-        if (!commandArgs[0] || Number.isNaN(id) || id <= 0) {
+        const id = Number(actionArgs[0]);
+        if (!actionArgs[0] || Number.isNaN(id) || id <= 0) {
           throw new Error('Por favor, informe um ID numérico válido.');
         }
-        const newDescription = commandArgs.slice(1).join(' ').trim();
+        const newDescription = actionArgs.slice(1).join(' ').trim();
         if (!newDescription) {
           throw new Error('Por favor, informe a nova descrição da tarefa.');
         }
         const updated = await service.editTask(id, newDescription);
-        log(`Tarefa #${updated.id} atualizada.`);
+        print(`Tarefa #${updated.id} atualizada.`);
         break;
       }
 
       default: {
         const programName = getProgramName();
         throw new Error(
-          `Comando "${command}" não reconhecido. Use "${programName} ajuda" para ver os comandos disponíveis.`
+          `Comando "${action}" não reconhecido. Use "${programName} ajuda" para ver os comandos disponíveis.`
         );
       }
     }
   } catch (err) {
     process.exitCode = 1;
-    logError(`Erro: ${err.message}`);
+    printError(`Erro: ${err.message}`);
   }
 }
