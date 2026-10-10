@@ -1,6 +1,6 @@
 {
   "name": "cli-task-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gerenciador de tarefas em linha de comando (CLI) em Node.js ESM",
   "type": "module",
   "main": "src/index.js",

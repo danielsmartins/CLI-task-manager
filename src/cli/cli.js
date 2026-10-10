@@ -20,7 +20,7 @@ export function getProgramName() {
   }
   const isPackaged = process.argv[1]?.includes('bundle.cjs') || process.argv0?.includes('tarefas');
   if (isPackaged) {
-    return process.platform === 'win32' ? './dist/tarefas.exe' : './dist/tarefas-linux';
+    return process.platform === 'win32' ? './tarefas.exe' : './tarefas-linux';
   }
   return 'node src/index.js';
 }
@@ -52,6 +52,8 @@ Exemplos:
   ${programName} concluir 1
   ${programName} editar 1 "Estudar Git avancado"
   ${programName} remover 1
+
+Aviso: Certifique-se de executar o comando dentro da pasta onde o arquivo se encontra.
 `.trim();
 }
 

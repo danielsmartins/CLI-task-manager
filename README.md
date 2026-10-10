@@ -156,11 +156,11 @@ Não é necessário clonar o código-fonte nem instalar dependências:
 
 **No Windows (PowerShell / CMD):**
 ```powershell
-.\tarefas.exe ajuda
-.\tarefas.exe adicionar "Comprar café"
-.\tarefas.exe listar
-.\tarefas.exe concluir 1
-.\tarefas.exe remover 1
+./tarefas.exe ajuda
+./tarefas.exe adicionar "Comprar café"
+./tarefas.exe listar
+./tarefas.exe concluir 1
+./tarefas.exe remover 1
 ```
 
 **No Linux (Terminal):**
@@ -172,6 +172,8 @@ chmod +x tarefas-linux
 ./tarefas-linux concluir 1
 ./tarefas-linux remover 1
 ```
+
+> **Aviso:** Certifique-se de executar o comando dentro da pasta onde o executável se encontra.
 
 #### Opção B: Compilação Local a partir do Código-Fonte
 Caso tenha clonado o repositório com Node.js instalado e deseje gerar os binários localmente:
@@ -187,7 +189,7 @@ Caso tenha clonado o repositório com Node.js instalado e deseje gerar os binár
 Execução após a compilação local:
 ```powershell
 # Windows:
-.\dist\tarefas.exe listar
+./dist/tarefas.exe listar
 
 # Linux:
 ./dist/tarefas-linux listar
@@ -292,7 +294,7 @@ src/
 
 - **Adaptação Dinâmica do Nome do Comando no Executável**:
   - *Problema:* Ao executar o binário compilado (`tarefas.exe`), a mensagem de ajuda e os erros sugeriam rodar `node src/index.js`, o que causava estranheza em máquinas sem o Node instalado.
-  - *Solução:* Criou-se a função utilitária `getProgramName()` em `cli.js`, que detecta dinamicamente o contexto de execução e a plataforma do sistema operacional (`process.platform`), exibindo `./dist/tarefas.exe` no Windows, `./dist/tarefas-linux` no Linux e `node src/index.js` na execução via script.
+  - *Solução:* Criou-se a função utilitária `getProgramName()` em `cli.js`, que detecta dinamicamente o contexto de execução e a plataforma do sistema operacional (`process.platform`), exibindo `./tarefas.exe` no Windows, `./tarefas-linux` no Linux e `node src/index.js` na execução via script.
 - **Isolamento Total dos Testes Unitários**:
   - *Problema:* Evitar que a suíte de testes apagasse ou sobrescrevesse o arquivo `tasks.json` real de desenvolvimento.
   - *Solução:* A camada de persistência foi parametrizada para receber o caminho do arquivo no construtor. Nos testes do Vitest, foram utilizados diretórios temporários criados em tempo de execução com `fs.mkdtemp` no diretório do sistema operacional (`os.tmpdir()`), garantindo idempotência e independência completa dos testes.
