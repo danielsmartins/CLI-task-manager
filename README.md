@@ -281,6 +281,7 @@ src/
 - **Injeção de Dependências & Design Híbrido**:
   - **Classes (`TaskService`, `TaskStorage`)**: Usam injeção via construtor para que múltiplos métodos compartilhem as dependências (`this.storage`, `this.filePath`).
   - **Módulo Funcional (`cli.js`)**: Usa injeção via parâmetros na função `runCli(args, service, io)`, evitando criar uma classe com apenas um método.
+- **Arquitetura em 3 Camadas vs. Hexagonal (Evitando Overengineering)**: Optou-se por uma separação direta em 3 camadas (`cli`, `services`, `storage`) em vez de Arquitetura Hexagonal (*Ports & Adapters*). Para o escopo desta CLI, criar portas formais, adaptadores e mappers adicionaria complexidade e boilerplate desnecessários. A estrutura escolhida garante todos os benefícios práticos, como: regras de negócio isoladas, I/O desacoplado e alta testabilidade (>95%), mantendo o código simples, conciso e pragmático (princípios **KISS** e **YAGNI**).
 - **Documentação JSDoc Completa**: Todo o código foi documentado com JSDoc (`@typedef`, `@param`, `@returns`, `@throws`), fornecendo anotações de tipos, autocompletion inteligente na IDE e documentação clara dos contratos de cada função.
 - **Implementação de Todos os Diferenciais**:
   - Filtragem por status (`--status pendente` / `listar concluida`).
